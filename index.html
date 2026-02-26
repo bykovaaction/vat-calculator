@@ -82,7 +82,7 @@ button#calcBtn:hover {
   min-width:100px;
   text-align:left;
 }
-/* Стиль кнопки Copy */
+/* Кнопка Copy */
 .copy-btn {
   width:50px;
   height:24px;
@@ -132,6 +132,7 @@ button#calcBtn:hover {
 </div>
 
 <script>
+// Форматирование числа
 function formatNumber(num) {
   return num.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
@@ -139,9 +140,17 @@ function formatNumber(num) {
   });
 }
 
-// Функция копирования
+// Копирование текста через скрытый input (работает в Word/Excel)
 function copyToClipboard(text) {
-  navigator.clipboard.writeText(text);
+  var tempInput = document.createElement("input");
+  tempInput.style.position = "absolute";
+  tempInput.style.left = "-1000px";
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  tempInput.setSelectionRange(0, 99999); // для мобильных
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
 }
 
 document.getElementById("calcBtn").addEventListener("click", function() {
@@ -168,6 +177,7 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     withoutVAT = amount - vat;
   }
 
+  // Формируем блок результата с кнопками Copy
   result.innerHTML = `
     <div class="result-row">
       <div class="result-label">Сумма без НДС:</div>
