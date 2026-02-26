@@ -11,14 +11,14 @@ body {
 }
 .box {
   background:#fff;
-  padding:30px 20px 20px 20px;
+  padding:30px 20px 30px 20px; /* добавлен нижний padding, чтобы внутренний квадрат не обрезался */
   border-radius:10px;
   max-width:450px;
   margin:auto;
   box-shadow:0 4px 12px rgba(0,0,0,0.08);
   display:flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* растягиваем элементы по ширине блока */
 }
 h2 {
   text-align:center;
@@ -65,11 +65,12 @@ button#calcBtn:hover {
   border-radius:6px;
   font-weight:bold;
   line-height:1.6;
-  text-align:center;
+  text-align:left; /* выравнивание текста по левому краю */
+  box-sizing: border-box;
 }
 .result-row {
   display:flex;
-  justify-content: center;
+  justify-content: flex-start; /* выравнивание по левому краю */
   align-items: center;
   margin-bottom:6px;
 }
@@ -82,7 +83,6 @@ button#calcBtn:hover {
   min-width:100px;
   text-align:left;
 }
-/* Кнопка Copy */
 .copy-btn {
   width:50px;
   height:24px;
@@ -132,7 +132,6 @@ button#calcBtn:hover {
 </div>
 
 <script>
-// Форматирование числа
 function formatNumber(num) {
   return num.toLocaleString('ru-RU', {
     minimumFractionDigits: 2,
@@ -140,7 +139,7 @@ function formatNumber(num) {
   });
 }
 
-// Копирование текста через скрытый input (работает в Word/Excel)
+// Рабочее копирование для Word/Excel через скрытый input
 function copyToClipboard(text) {
   var tempInput = document.createElement("input");
   tempInput.style.position = "absolute";
@@ -148,7 +147,7 @@ function copyToClipboard(text) {
   tempInput.value = text;
   document.body.appendChild(tempInput);
   tempInput.select();
-  tempInput.setSelectionRange(0, 99999); // для мобильных
+  tempInput.setSelectionRange(0, 99999);
   document.execCommand("copy");
   document.body.removeChild(tempInput);
 }
@@ -177,7 +176,6 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     withoutVAT = amount - vat;
   }
 
-  // Формируем блок результата с кнопками Copy
   result.innerHTML = `
     <div class="result-row">
       <div class="result-label">Сумма без НДС:</div>
