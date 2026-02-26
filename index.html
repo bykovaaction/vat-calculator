@@ -11,14 +11,14 @@ body {
 }
 .box {
   background:#fff;
-  padding:30px 20px 20px 20px; /* сверху больше, снизу меньше */
+  padding:30px 20px 20px 20px;
   border-radius:10px;
   max-width:450px;
   margin:auto;
   box-shadow:0 4px 12px rgba(0,0,0,0.08);
   display:flex;
   flex-direction: column;
-  align-items: center; /* центрируем по горизонтали */
+  align-items: center;
 }
 h2 {
   text-align:center;
@@ -44,9 +44,9 @@ input, select, button {
   border-radius:6px;
   border:1px solid #ccc;
   font-size:14px;
-  box-sizing: border-box; /* чтобы padding не «вылезал» */
+  box-sizing: border-box;
 }
-button {
+button#calcBtn {
   background:#2d89ef;
   color:#fff;
   border:none;
@@ -54,7 +54,7 @@ button {
   font-weight:bold;
   margin-top:10px;
 }
-button:hover {
+button#calcBtn:hover {
   background:#1b5fbf;
 }
 .result {
@@ -66,6 +66,39 @@ button:hover {
   font-weight:bold;
   line-height:1.6;
   text-align:center;
+}
+.result-row {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:6px;
+}
+.result-label {
+  width:140px;
+  text-align:right;
+  margin-right:6px;
+}
+.result-value {
+  min-width:100px;
+  text-align:left;
+}
+/* Стиль кнопки Copy */
+.copy-btn {
+  width:50px;
+  height:24px;
+  background:#ddd;
+  color:#000;
+  border:none;
+  border-radius:4px;
+  margin-left:6px;
+  cursor:pointer;
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.copy-btn:hover {
+  background:#ccc;
 }
 </style>
 </head>
@@ -106,6 +139,11 @@ function formatNumber(num) {
   });
 }
 
+// Функция копирования
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text);
+}
+
 document.getElementById("calcBtn").addEventListener("click", function() {
   var amountInput = document.getElementById("amount").value.replace(",", ".");
   var amount = parseFloat(amountInput);
@@ -130,10 +168,23 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     withoutVAT = amount - vat;
   }
 
-  result.innerHTML =
-    "Сумма без НДС: " + formatNumber(withoutVAT) + "<br>" +
-    "НДС: " + formatNumber(vat) + "<br>" +
-    "Сумма с НДС: " + formatNumber(withVAT);
+  result.innerHTML = `
+    <div class="result-row">
+      <div class="result-label">Сумма без НДС:</div>
+      <div class="result-value">${formatNumber(withoutVAT)}</div>
+      <button class="copy-btn" onclick="copyToClipboard('${formatNumber(withoutVAT)}')">Copy</button>
+    </div>
+    <div class="result-row">
+      <div class="result-label">НДС:</div>
+      <div class="result-value">${formatNumber(vat)}</div>
+      <button class="copy-btn" onclick="copyToClipboard('${formatNumber(vat)}')">Copy</button>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Сумма с НДС:</div>
+      <div class="result-value">${formatNumber(withVAT)}</div>
+      <button class="copy-btn" onclick="copyToClipboard('${formatNumber(withVAT)}')">Copy</button>
+    </div>
+  `;
 });
 </script>
 
